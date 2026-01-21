@@ -1,0 +1,43 @@
+import heapq
+
+def dijkstra(graph, start):
+    # Inisialisasi jarak ke tak hingga
+    jarak = {}
+    for node in graph:
+        jarak[node] = float('inf')
+    jarak[start] = 0
+
+    # Priority Queue
+    pq = [(0, start)]
+
+    while pq:
+        jarak_sekarang, node_sekarang = heapq.heappop(pq)
+
+        if jarak_sekarang > jarak[node_sekarang]:
+            continue
+
+        # Periksa semua tetangga
+        for tetangga, bobot in graph[node_sekarang]:
+            jarak_baru = jarak_sekarang + bobot
+
+            if jarak_baru < jarak[tetangga]:
+                jarak[tetangga] = jarak_baru
+                heapq.heappush(pq, (jarak_baru, tetangga))
+
+    return jarak
+
+
+# Graf (Gudang ke Toko)
+graf = {
+    'A': [('B', 4), ('C', 2)],
+    'B': [('C', 1), ('D', 5), ('E', 7)],
+    'C': [('D', 8), ('E', 10)],
+    'D': [('E', 2)],
+    'E': []
+}
+
+hasil = dijkstra(graf, 'A')
+
+print("Jarak terpendek dari Gudang:")
+for node in hasil:
+    print(node, "=", hasil[node], "km")
